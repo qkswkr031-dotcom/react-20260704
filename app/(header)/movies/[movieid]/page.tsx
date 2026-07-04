@@ -37,24 +37,53 @@ export interface Rating {
   Value: string
 }
 
-export const metadata = {
-  title: '영화 상세 정보',
-  description: '영화 상세 정보의 설명',
-  openGraph: {
-    type: 'website',
-    siteName: 'Next.js 연습 프로젝트',
-    title: '영화 상세 정보',
-    description: '영화 상세 정보의 설명',
-    images: 'https://picsum.photos/700/500'
+// export const metadata = {
+//   title: '영화 상세 정보',
+//   description: '영화 상세 정보의 설명',
+//   openGraph: {
+//     type: 'website',
+//     siteName: 'Next.js 연습 프로젝트',
+//     title: '영화 상세 정보',
+//     description: '영화 상세 정보의 설명',
+//     images: 'https://picsum.photos/700/500'
+//   }
+// }
+
+async function fetchMovie(movieId: string) {
+  //   const { data: movie } = await axios.get<Movie>(
+  //     `https://omdbapi.com?apikey=${process.env.OMDB_APIKEY}&i=${movieId}`
+  //   )
+  const res = await fetch(
+    `https://omdbapi.com?apikey=${process.env.OMDB_APIKEY}&i=${movieId}`,
+    {
+      method: 'GET', // GET이 기본값이기 때문에 생략 가능.
+      cache: 'force-cache' // next.js 전용 기능
+    }
+  )
+  const movie = await res.json()
+  return movie
+}
+
+export async function generateMetadata({ params }: Props) {
+  const { movieId } = await params
+  const movie = await fetchMovie(movieId)
+  return {
+    title: movie.Title,
+    description: movie.Plot,
+    openGraph: {
+      type: 'website',
+      siteName: 'Next.js 연습 프로젝트',
+      title: movie.Title,
+      description: movie.Plot,
+      images: movie.Poster
+    }
   }
 }
 
 // http://localhost:3000/movies/tt123455123
 export default async function MovieDetails({ params }: Props) {
   const { movieId } = await params
-  const { data: movie } = await axios.get<Movie>(
-    `https://omdbapi.com?apikey=${process.env.OMDB_APIKEY}&i=${movieId}`
-  )
+  const movie = await fetchMovie(movieId)
   return (
     <>
       <h1>{movie.Title}</h1>
