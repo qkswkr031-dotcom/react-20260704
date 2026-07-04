@@ -1,0 +1,11 @@
+TanStack React Query를 왜 사용하는가
+서버에서 가져오는 서버 상태(데이터)와 단순 클라이언트에서만 관리되는 일반 상태(데이터)의 차이
+서버 상태: 영화 목록, 할 일 목록 등
+일단 상태: 모달 열림 여부, 다크 모드 등
+
+useQuery와 useMutation의 주요 옵션 이해
+queryKey, queryFn, staleTime, mutationFn, onMutate, onSuccess, onError, onSettled 등
+
+useQuery와 useMutation의 차이 - 언제 무엇을 왜 사용하는가
+낙관적 업데이트(Optimistic Update)란 무엇인가
+useMutation에서 낙관적 업데이트를 구현하는 방법
